@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Karishma ❤️</title>
+
+<!-- QR Code Library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+<style>
+
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background: linear-gradient(to bottom, #ffe6f0, #ffffff);
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    background: white;
+    padding: 25px;
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    max-width: 420px;
+    margin: auto;
+}
+
+.bear {
+    font-size: 60px;
+}
+
+h1 {
+    color: #ff4d88;
+    font-size: 26px;
+}
+
+/* Mobile friendly buttons */
+.button-group {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+button {
+    padding: 12px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    max-width: 180px;
+    white-space: normal;
+}
+
+#yesBtn {
+    background-color: #4CAF50;
+    color: white;
+}
+
+#noBtn {
+    background-color: #ff4d4d;
+    color: white;
+}
+
+#message {
+    font-size: 22px;
+    color: #ff4d88;
+    margin-top: 20px;
+    display: none;
+}
+
+/* QR Code */
+#qrcode {
+    margin-top: 25px;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- Background Song -->
+<iframe width="0" height="0"
+src="https://www.youtube.com/embed/47Fbo4kU2AU?autoplay=1&loop=1&playlist=47Fbo4kU2AU"
+allow="autoplay">
+</iframe>
+
+<div class="container">
+
+<div class="bear">🐻💕</div>
+
+<h1>Karishma, Will you be my Valentine?</h1>
+
+<div class="button-group">
+<button id="yesBtn">Yes ❤️</button>
+<button id="noBtn">No 😢</button>
+</div>
+
+<div id="message">
+YAYYYYY!!! I knew it 🥰💖 <br>
+<span style="font-size:18px;">
+You’ll be my Valentine forever ❤️
+</span>
+</div>
+
+<div id="qrcode"></div>
+
+</div>
+
+<script>
+
+const yesBtn = document.getElementById("yesBtn");
+const noBtn = document.getElementById("noBtn");
+const message = document.getElementById("message");
+
+let noClickCount = 0;
+let yesSize = 1;
+
+const noMessages = [
+"did you click no ☹️?",
+"Are you going to do this in front of baburao?",
+"I really wanted to take you to mantis ☹️",
+"Atleast do it for the Jews",
+"I swear I’ll give you something sweet to eat"
+];
+
+noBtn.addEventListener("click", () => {
+
+    if (noClickCount < 5) {
+
+        yesSize += 0.3;
+        yesBtn.style.transform = `scale(${yesSize})`;
+
+        noBtn.textContent = noMessages[noClickCount];
+
+        noClickCount++;
+
+        if (noClickCount === 5) {
+            noBtn.textContent = "Yes ❤️";
+            noBtn.style.backgroundColor = "#4CAF50";
+        }
+    }
+});
+
+function acceptLove() {
+    message.style.display = "block";
+    yesBtn.style.display = "none";
+    noBtn.style.display = "none";
+}
+
+yesBtn.addEventListener("click", acceptLove);
+
+noBtn.addEventListener("click", () => {
+    if (noClickCount >= 5) acceptLove();
+});
+
+/* QR Code Generator */
+new QRCode(document.getElementById("qrcode"), {
+    text: window.location.href,
+    width: 150,
+    height: 150
+});
+
+</script>
+
+</body>
+</html>

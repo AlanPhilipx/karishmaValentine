@@ -35,9 +35,7 @@ body {
     z-index: 2;
 }
 
-.bear {
-    font-size: 60px;
-}
+.bear { font-size: 60px; }
 
 h1 {
     color: #ff4d88;
@@ -88,6 +86,18 @@ button {
     display: none;
 }
 
+/* Photo Gallery */
+.gallery {
+    margin-top: 25px;
+    display: none;
+}
+
+.gallery img {
+    width: 100%;
+    border-radius: 15px;
+    margin-bottom: 15px;
+}
+
 /* Floating Hearts */
 .heart {
     position: fixed;
@@ -124,9 +134,16 @@ button {
 <div id="message">
 YAYYYYY!!! I knew it 🥰💖 <br>
 <span style="font-size:18px;">
-You’ll be my Valentine forever ❤️
+you’ll be my valentine forever ❤️
 </span>
 </div>
+
+<div class="gallery" id="gallery">
+<img src="photo1.jpg">
+<img src="photo2.jpg">
+<img src="photo3.jpg">
+</div>
+
 </div>
 
 <script>
@@ -134,6 +151,7 @@ You’ll be my Valentine forever ❤️
 const yesBtn = document.getElementById("yesBtn");
 const noBtn = document.getElementById("noBtn");
 const message = document.getElementById("message");
+const gallery = document.getElementById("gallery");
 const music = document.getElementById("bgMusic");
 
 let noClickCount = 0;
@@ -145,14 +163,18 @@ const noMessages = [
 "Are you going to do this in front of baburao?",
 "I really wanted to take you to mantis ☹️",
 "Atleast do it for the Jews",
-"I swear I’ll give you something sweet to eat"
+"I swear I’ll give you something sweet to eat",
+"You’re really going to give up this 9 inch this Valentine’s?",
+"Shutup and just kiss me through the phone instead? 😘",
+"Okay now you're just being dramatic",
+"Fine… last chance 😏"
 ];
 
 noBtn.addEventListener("click", () => {
 
-    if (noClickCount < 5) {
+    if (noClickCount < 9) {
 
-        yesFontSize += 6;
+        yesFontSize += 5;
         yesPadding += 6;
 
         yesBtn.style.fontSize = yesFontSize + "px";
@@ -162,8 +184,8 @@ noBtn.addEventListener("click", () => {
 
         noClickCount++;
 
-        if (noClickCount === 5) {
-            noBtn.textContent = "Yes ❤️";
+        if (noClickCount === 9) {
+            noBtn.textContent = "too bad you’re just going to have to say yes";
             noBtn.style.backgroundColor = "#4CAF50";
         }
     }
@@ -171,6 +193,7 @@ noBtn.addEventListener("click", () => {
 
 function acceptLove() {
     message.style.display = "block";
+    gallery.style.display = "block";
     yesBtn.style.display = "none";
     noBtn.style.display = "none";
     launchConfetti();
@@ -178,10 +201,10 @@ function acceptLove() {
 
 yesBtn.addEventListener("click", acceptLove);
 noBtn.addEventListener("click", () => {
-    if (noClickCount >= 5) acceptLove();
+    if (noClickCount >= 9) acceptLove();
 });
 
-/* Music Fade In */
+/* Music Fade */
 window.addEventListener("load", () => {
     music.volume = 0;
     music.play().catch(() => {
@@ -197,7 +220,7 @@ window.addEventListener("load", () => {
     }, 200);
 });
 
-/* Floating Hearts Generator */
+/* Floating Hearts */
 function createHeart() {
     const heart = document.createElement("div");
     heart.classList.add("heart");
@@ -206,22 +229,18 @@ function createHeart() {
     heart.style.fontSize = (Math.random() * 20 + 15) + "px";
     heart.style.animationDuration = (Math.random() * 3 + 4) + "s";
     document.body.appendChild(heart);
-
-    setTimeout(() => {
-        heart.remove();
-    }, 6000);
+    setTimeout(() => heart.remove(), 6000);
 }
-
 setInterval(createHeart, 500);
 
 /* Confetti */
 function launchConfetti() {
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 120; i++) {
         const confetti = document.createElement("div");
         confetti.style.position = "fixed";
         confetti.style.width = "8px";
         confetti.style.height = "8px";
-        confetti.style.backgroundColor = 
+        confetti.style.backgroundColor =
             ["#ff4d88","#ffcc00","#4CAF50","#00bfff"][Math.floor(Math.random()*4)];
         confetti.style.top = Math.random() * window.innerHeight + "px";
         confetti.style.left = Math.random() * window.innerWidth + "px";
@@ -232,7 +251,6 @@ function launchConfetti() {
         let fall = setInterval(() => {
             confetti.style.top = parseFloat(confetti.style.top) + 5 + "px";
             confetti.style.opacity -= 0.02;
-
             if (confetti.style.opacity <= 0) {
                 clearInterval(fall);
                 confetti.remove();

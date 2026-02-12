@@ -5,26 +5,34 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Karishma ❤️</title>
 
-<!-- QR Code Library -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-
 <style>
 
+/* Animated Background */
 body {
     font-family: Arial, sans-serif;
     text-align: center;
-    background: linear-gradient(to bottom, #ffe6f0, #ffffff);
     margin: 0;
     padding: 20px;
+    background: linear-gradient(-45deg, #ffe6f0, #ffd1dc, #fff0f5, #ffe6f0);
+    background-size: 400% 400%;
+    animation: gradientMove 10s ease infinite;
+}
+
+@keyframes gradientMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
 }
 
 .container {
     background: white;
-    padding: 25px;
+    padding: 30px;
     border-radius: 20px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    box-shadow: 0 0 25px rgba(0,0,0,0.08);
     max-width: 420px;
     margin: auto;
+    position: relative;
+    z-index: 2;
 }
 
 .bear {
@@ -33,32 +41,39 @@ body {
 
 h1 {
     color: #ff4d88;
-    font-size: 26px;
+    font-size: 24px;
 }
 
-/* Mobile friendly buttons */
 .button-group {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
     gap: 15px;
-    margin-top: 20px;
-    flex-wrap: wrap;
+    margin-top: 25px;
 }
 
 button {
-    padding: 12px 20px;
+    padding: 14px 20px;
     font-size: 16px;
     border: none;
-    border-radius: 12px;
+    border-radius: 14px;
     cursor: pointer;
     transition: all 0.3s ease;
-    max-width: 180px;
+    width: 85%;
+    max-width: 300px;
     white-space: normal;
 }
 
 #yesBtn {
     background-color: #4CAF50;
     color: white;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
 }
 
 #noBtn {
@@ -69,13 +84,23 @@ button {
 #message {
     font-size: 22px;
     color: #ff4d88;
-    margin-top: 20px;
+    margin-top: 25px;
     display: none;
 }
 
-/* QR Code */
-#qrcode {
-    margin-top: 25px;
+/* Floating Hearts */
+.heart {
+    position: fixed;
+    bottom: -20px;
+    font-size: 20px;
+    animation: floatUp 6s linear infinite;
+    opacity: 0.7;
+    z-index: 1;
+}
+
+@keyframes floatUp {
+    0% { transform: translateY(0); opacity: 0.7; }
+    100% { transform: translateY(-100vh); opacity: 0; }
 }
 
 </style>
@@ -83,16 +108,12 @@ button {
 
 <body>
 
-<!-- Background Song -->
-<iframe width="0" height="0"
-src="https://www.youtube.com/embed/47Fbo4kU2AU?autoplay=1&loop=1&playlist=47Fbo4kU2AU"
-allow="autoplay">
-</iframe>
+<audio id="bgMusic" autoplay loop>
+  <source src="kiss-me-through-the-phone.mp3" type="audio/mpeg">
+</audio>
 
 <div class="container">
-
 <div class="bear">🐻💕</div>
-
 <h1>Karishma, Will you be my Valentine?</h1>
 
 <div class="button-group">
@@ -106,9 +127,6 @@ YAYYYYY!!! I knew it 🥰💖 <br>
 You’ll be my Valentine forever ❤️
 </span>
 </div>
-
-<div id="qrcode"></div>
-
 </div>
 
 <script>
@@ -116,9 +134,11 @@ You’ll be my Valentine forever ❤️
 const yesBtn = document.getElementById("yesBtn");
 const noBtn = document.getElementById("noBtn");
 const message = document.getElementById("message");
+const music = document.getElementById("bgMusic");
 
 let noClickCount = 0;
-let yesSize = 1;
+let yesFontSize = 16;
+let yesPadding = 14;
 
 const noMessages = [
 "did you click no ☹️?",
@@ -132,8 +152,11 @@ noBtn.addEventListener("click", () => {
 
     if (noClickCount < 5) {
 
-        yesSize += 0.3;
-        yesBtn.style.transform = `scale(${yesSize})`;
+        yesFontSize += 6;
+        yesPadding += 6;
+
+        yesBtn.style.fontSize = yesFontSize + "px";
+        yesBtn.style.padding = yesPadding + "px";
 
         noBtn.textContent = noMessages[noClickCount];
 
@@ -150,20 +173,73 @@ function acceptLove() {
     message.style.display = "block";
     yesBtn.style.display = "none";
     noBtn.style.display = "none";
+    launchConfetti();
 }
 
 yesBtn.addEventListener("click", acceptLove);
-
 noBtn.addEventListener("click", () => {
     if (noClickCount >= 5) acceptLove();
 });
 
-/* QR Code Generator */
-new QRCode(document.getElementById("qrcode"), {
-    text: window.location.href,
-    width: 150,
-    height: 150
+/* Music Fade In */
+window.addEventListener("load", () => {
+    music.volume = 0;
+    music.play().catch(() => {
+        document.addEventListener("click", () => music.play(), { once: true });
+    });
+
+    let fade = setInterval(() => {
+        if (music.volume < 0.6) {
+            music.volume += 0.05;
+        } else {
+            clearInterval(fade);
+        }
+    }, 200);
 });
+
+/* Floating Hearts Generator */
+function createHeart() {
+    const heart = document.createElement("div");
+    heart.classList.add("heart");
+    heart.innerHTML = "❤️";
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.fontSize = (Math.random() * 20 + 15) + "px";
+    heart.style.animationDuration = (Math.random() * 3 + 4) + "s";
+    document.body.appendChild(heart);
+
+    setTimeout(() => {
+        heart.remove();
+    }, 6000);
+}
+
+setInterval(createHeart, 500);
+
+/* Confetti */
+function launchConfetti() {
+    for (let i = 0; i < 100; i++) {
+        const confetti = document.createElement("div");
+        confetti.style.position = "fixed";
+        confetti.style.width = "8px";
+        confetti.style.height = "8px";
+        confetti.style.backgroundColor = 
+            ["#ff4d88","#ffcc00","#4CAF50","#00bfff"][Math.floor(Math.random()*4)];
+        confetti.style.top = Math.random() * window.innerHeight + "px";
+        confetti.style.left = Math.random() * window.innerWidth + "px";
+        confetti.style.opacity = 1;
+        confetti.style.zIndex = 3;
+        document.body.appendChild(confetti);
+
+        let fall = setInterval(() => {
+            confetti.style.top = parseFloat(confetti.style.top) + 5 + "px";
+            confetti.style.opacity -= 0.02;
+
+            if (confetti.style.opacity <= 0) {
+                clearInterval(fall);
+                confetti.remove();
+            }
+        }, 30);
+    }
+}
 
 </script>
 

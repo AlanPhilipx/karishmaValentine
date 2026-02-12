@@ -164,13 +164,13 @@ const noMessages = [
 "I really wanted to take you to mantis ☹️",
 "Atleast do it for the Jews",
 "I swear I’ll give you something sweet to eat",
-"You’re really going to give up this 9 inch this Valentine’s?",
-"Shutup and just kiss me through the phone instead? 😘",
+"You’re really going to fumble this Valentine’s?",
+"Shutup and just kiss me instead? 😘",
 "Okay now you're just being dramatic",
 "Fine… last chance 😏"
 ];
 
-noBtn.addEventListener("click", () => {
+function handleNoClick() {
 
     if (noClickCount < 9) {
 
@@ -181,15 +181,26 @@ noBtn.addEventListener("click", () => {
         yesBtn.style.padding = yesPadding + "px";
 
         noBtn.textContent = noMessages[noClickCount];
-
         noClickCount++;
 
         if (noClickCount === 9) {
+
             noBtn.textContent = "too bad you’re just going to have to say yes";
             noBtn.style.backgroundColor = "#4CAF50";
+
+            // Remove pulse from original YES
+            yesBtn.style.animation = "none";
+
+            // Remove NO click logic
+            noBtn.removeEventListener("click", handleNoClick);
+
+            // Make it act as YES
+            noBtn.addEventListener("click", acceptLove);
         }
     }
-});
+}
+
+noBtn.addEventListener("click", handleNoClick);
 
 function acceptLove() {
     message.style.display = "block";
@@ -200,9 +211,6 @@ function acceptLove() {
 }
 
 yesBtn.addEventListener("click", acceptLove);
-noBtn.addEventListener("click", () => {
-    if (noClickCount >= 9) acceptLove();
-});
 
 /* Music Fade */
 window.addEventListener("load", () => {
@@ -263,4 +271,3 @@ function launchConfetti() {
 
 </body>
 </html>
-
